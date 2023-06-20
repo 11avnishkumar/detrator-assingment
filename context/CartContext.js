@@ -16,6 +16,10 @@ const CartContext = ({ children }) => {
   const addProduct = (product) => {
     dispatch({ type: "ADD_TO_CART", payload: product });
   };
+  // Remove Product
+  const removeProduct = (product) => {
+    dispatch({ type: "REMOVE_FROM_CART", payload: product });
+  };
 
   return (
     <GlobalContext.Provider
@@ -24,6 +28,7 @@ const CartContext = ({ children }) => {
         state,
         dispatch,
         addProduct,
+        removeProduct,
       }}
     >
       {children}

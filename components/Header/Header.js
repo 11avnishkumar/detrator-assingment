@@ -20,8 +20,9 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Header = () => {
   const isLoggedIn = true;
+  // global context
   const { cart } = useContext(GlobalContext);
-
+  console.log(cart);
   const handleLogout = () => {};
 
   const [anchorEl, setAnchorEl] = React.useState(null);
