@@ -1,95 +1,69 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import { useContext } from "react";
+import { GlobalContext } from "@/context/CartContext";
+import { Grid, Box } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { Button, CardActionArea, CardActions, Rating } from "@mui/material";
 
-export default function Home() {
+export default async function Home() {
+  const { addProduct } = useContext(GlobalContext);
+  const data = await getData();
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Box p={2}>
+      <Typography variant="h4" mb={4} mt={4}>
+        All Products
+      </Typography>
+      <Grid container spacing={2} justifyContent={"center"} gap={4}>
+        {data.map((product) => (
+          <Card
+            sx={{ maxWidth: 345, height: "100%", width: 345 }}
+            key={product.id}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+            <CardActionArea style={{ height: 400 }}>
+              <CardMedia
+                component="img"
+                height="140"
+                image={product.image}
+                alt={product.title}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h6" component="div">
+                  {product.title}
+                </Typography>
+                <Typography variant="h4" color="text.secondary" mb={2}>
+                  {product.price}
+                </Typography>
+                <Typography variant="h6" color="text.secondary" mb={2}>
+                  {product.category}
+                </Typography>
+                <Rating name="simple-controlled" mt={4} />
+              </CardContent>
+            </CardActionArea>
+            <CardActions>
+              <Button
+                type="button"
+                size="small"
+                color="primary"
+                variant="contained"
+                onClick={() => addProduct(product)}
+              >
+                Add to Cart
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
+      </Grid>
+    </Box>
+  );
+}
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+async function getData() {
+  const res = await fetch("https://fakestoreapi.com/products");
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
 }
