@@ -20,7 +20,7 @@ const handler = NextAuth({
         if (!isPasswordMatched) {
           throw new Error("Invalid email or password");
         }
-
+        console.log(user);
         return user;
       },
     }),

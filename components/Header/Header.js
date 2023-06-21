@@ -24,12 +24,14 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import { useSession } from "next-auth/react";
 
 const Header = () => {
-  const session = useSession();
-  console.log(session);
-  const isLoggedIn = false;
+  // if the user authenticated fetch the information
+  const { data: authUserInfo } = useSession();
+  console.log(authUserInfo);
+
+  const isLoggedIn = authUserInfo ? true : false;
   // global context
   const { cart } = useContext(GlobalContext);
-  console.log(cart);
+
   // Modal state
   const [open, setOpen] = React.useState(false);
   const handleLogout = () => {};
@@ -50,21 +52,7 @@ const Header = () => {
         <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
           Deterator
         </Typography>
-        <Grid
-          container
-          justifyContent="center"
-          alignItems="center"
-          spacing={2}
-          sx={{
-            maxWidth: "600px",
-            margin: "0 auto",
-            "@media (max-width: 600px)": {
-              justifyContent: "flex-start",
-              maxWidth: "100%",
-              padding: "0 16px",
-            },
-          }}
-        >
+        <Grid container justifyContent="center" alignItems="center" spacing={2}>
           <Grid item>
             <Link href="/" style={{ textDecoration: "none", color: "white" }}>
               Home
@@ -143,11 +131,13 @@ const Header = () => {
                 >
                   <MenuItem onClick={handleClose}>
                     <Link href="/profile/">
-                      <Button>Profile</Button>
+                      <Button>
+                        {authUserInfo?.user.firstname
+                          ? authUserInfo.user.firstname
+                          : authUserInfo.user.email}
+                      </Button>
                     </Link>
-                    <Link href="/profile/">
-                      <Button onClick={handleLogout}>Logout</Button>
-                    </Link>
+                    <Button onClick={handleLogout}>Logout</Button>
                   </MenuItem>
                 </Menu>
               </>

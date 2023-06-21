@@ -1,4 +1,5 @@
 "use client";
+import { useSession, signOut } from "next-auth/react";
 import React from "react";
 import {
   Container,
@@ -10,10 +11,12 @@ import {
 } from "@mui/material";
 
 const ProfilePage = () => {
+  // if the user authenticated fetch the information
+  const { data: authUserInfo } = useSession();
   const user = {
     firstName: "John",
     lastName: "Doe",
-    email: "johndoe@example.com",
+    email: authUserInfo.user.email,
     phoneNumber: "123-456-7890",
     locale: "en-US",
     lastLoggedIn: "June 20, 2023",
@@ -31,7 +34,7 @@ const ProfilePage = () => {
   };
 
   const handleLogout = () => {
-    // Implement your logout logic here
+    signOut();
   };
 
   return (

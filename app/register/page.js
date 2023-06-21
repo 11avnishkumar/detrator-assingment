@@ -12,7 +12,10 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import axios from "axios";
 function Copyright(props) {
   return (
     <Typography
@@ -32,13 +35,21 @@ function Copyright(props) {
 }
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const userFormdata = new FormData(event.currentTarget);
+
+    try {
+      const data = await axios.post(/api/, {
+        firstname: userFormdata.get("firstName"),
+        lastname: userFormdata.get("lastName"),
+        email: userFormdata.get("email"),
+        password: userFormdata.get("password"),
+      });
+      console.log("from registration page", data);
+    } catch (err) {
+      console.log("Registration Failed", err);
+    }
   };
 
   return (
@@ -85,6 +96,21 @@ export default function SignUp() {
               <TextField
                 required
                 fullWidth
+                id="phone"
+                label="Phone Number"
+                name="phone"
+                autoComplete="phone"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker fullWidth />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
@@ -113,6 +139,7 @@ export default function SignUp() {
             type="submit"
             fullWidth
             variant="contained"
+            size="large"
             sx={{ mt: 3, mb: 2 }}
           >
             Sign Up
