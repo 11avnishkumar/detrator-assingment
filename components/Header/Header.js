@@ -1,5 +1,6 @@
 "use client";
 import React, { useContext } from "react";
+import Cart from "../Cart/Cart";
 import { GlobalContext } from "@/context/CartContext";
 import {
   Grid,
@@ -17,12 +18,20 @@ import Link from "next/link";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+// next authentication
+import { useSession } from "next-auth/react";
 
 const Header = () => {
-  const isLoggedIn = true;
+  const session = useSession();
+  console.log(session);
+  const isLoggedIn = false;
   // global context
   const { cart } = useContext(GlobalContext);
   console.log(cart);
+  // Modal state
+  const [open, setOpen] = React.useState(false);
   const handleLogout = () => {};
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -38,8 +47,8 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Deter
+        <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+          Deterator
         </Typography>
         <Grid
           container
@@ -90,12 +99,13 @@ const Header = () => {
           <Grid item sx={{ display: { xs: "none", sm: "block" } }}>
             <IconButton>
               <Badge badgeContent={`${cart.length}`} color="error">
-                <ShoppingCartIcon />
+                <ShoppingCartIcon onClick={() => setOpen(true)} />
+                <Cart open={open} setOpen={setOpen} />
               </Badge>
             </IconButton>
           </Grid>
           <Grid item>
-            <div>
+            <>
               <IconButton>
                 <SearchIcon />
               </IconButton>
@@ -103,7 +113,7 @@ const Header = () => {
                 placeholder="Search..."
                 inputProps={{ "aria-label": "search" }}
               />
-            </div>
+            </>
           </Grid>
           <Grid item sx={{ display: { xs: "block", sm: "none" } }}>
             <IconButton>
@@ -135,16 +145,32 @@ const Header = () => {
                     <Link href="/profile/">
                       <Button>Profile</Button>
                     </Link>
+                    <Link href="/profile/">
+                      <Button onClick={handleLogout}>Logout</Button>
+                    </Link>
                   </MenuItem>
                 </Menu>
               </>
             ) : (
               <>
                 <Link href="/login">
-                  <Button color="inherit">Login</Button>
+                  <Button
+                    variant="contained"
+                    size={"large"}
+                    startIcon={<LockOutlinedIcon />}
+                  >
+                    Login
+                  </Button>
                 </Link>
-                <Link href="/register">
-                  <Button color="inherit">Register</Button>
+                <Link href="/register" style={{ marginLeft: "1rem" }}>
+                  <Button
+                    variant="contained"
+                    size={"large"}
+                    color="secondary"
+                    startIcon={<PersonOutlineOutlinedIcon />}
+                  >
+                    Register
+                  </Button>
                 </Link>
               </>
             )}

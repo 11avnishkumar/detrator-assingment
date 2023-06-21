@@ -20,7 +20,14 @@ const CartContext = ({ children }) => {
   const removeProduct = (product) => {
     dispatch({ type: "REMOVE_FROM_CART", payload: product });
   };
-
+  // checkProduct already exist in the cart
+  const checkProduct = (product) => {
+    return state.cart.some((prod) => prod.id === product.id);
+  };
+  // calculate totalAmount
+  const totalAmount = () => {
+    return state.cart.reduce((sum, items) => sum + items.price, 0);
+  };
   return (
     <GlobalContext.Provider
       value={{
@@ -29,6 +36,8 @@ const CartContext = ({ children }) => {
         dispatch,
         addProduct,
         removeProduct,
+        checkProduct,
+        totalAmount,
       }}
     >
       {children}

@@ -1,5 +1,6 @@
 "use client";
 import { useContext } from "react";
+import { use } from "react";
 import { GlobalContext } from "@/context/CartContext";
 import { Grid, Box } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -8,9 +9,9 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions, Rating } from "@mui/material";
 
-export default async function Home() {
-  const { addProduct } = useContext(GlobalContext);
-  const data = await getData();
+export default function Home() {
+  const { addProduct, removeProduct, checkProduct } = useContext(GlobalContext);
+  const data = use(dataPromise);
   return (
     <Box p={2}>
       <Typography variant="h4" mb={4} mt={4}>
@@ -43,15 +44,27 @@ export default async function Home() {
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button
-                type="button"
-                size="small"
-                color="primary"
-                variant="contained"
-                onClick={() => addProduct(product)}
-              >
-                Add to Cart
-              </Button>
+              {checkProduct(product) ? (
+                <Button
+                  type="button"
+                  size="small"
+                  color="error"
+                  variant="contained"
+                  onClick={() => removeProduct(product)}
+                >
+                  Remove Product
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  size="small"
+                  color="primary"
+                  variant="contained"
+                  onClick={() => addProduct(product)}
+                >
+                  Add to Cart
+                </Button>
+              )}
             </CardActions>
           </Card>
         ))}
@@ -67,3 +80,5 @@ async function getData() {
   }
   return res.json();
 }
+
+const dataPromise = getData();

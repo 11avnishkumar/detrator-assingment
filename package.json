@@ -13,7 +13,12 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.5",
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+    "mongoose": "^7.3.0",
     "next": "13.4.6",
+    "next-auth": "^4.22.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   }
