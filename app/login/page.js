@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 function Copyright(props) {
   return (
     <Typography
@@ -32,15 +33,17 @@ function Copyright(props) {
 }
 
 export default function SignIn() {
+  const router = useRouter();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const userFormdata = new FormData(event.currentTarget);
     try {
-      const data = await signIn("credentials", {
+      await signIn("credentials", {
         redirect: false,
         email: userFormdata.get("email"),
         password: userFormdata.get("password"),
       });
+      router.push("/");
     } catch (err) {
       console.log("An error occurred while try to authenticate");
     }

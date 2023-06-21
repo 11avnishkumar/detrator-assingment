@@ -21,12 +21,12 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 // next authentication
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 const Header = () => {
   // if the user authenticated fetch the information
   const { data: authUserInfo } = useSession();
-  console.log(authUserInfo);
+  
 
   const isLoggedIn = authUserInfo ? true : false;
   // global context
@@ -34,7 +34,9 @@ const Header = () => {
 
   // Modal state
   const [open, setOpen] = React.useState(false);
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    signOut();
+  };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 

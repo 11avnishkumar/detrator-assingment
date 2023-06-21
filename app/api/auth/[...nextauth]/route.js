@@ -13,6 +13,7 @@ const handler = NextAuth({
         dbConnect();
         const { email, password } = credentials;
         const user = await User.findOne({ email });
+        console.log("from api", user);
         if (!user) {
           throw new Error("User not found!");
         }
@@ -20,14 +21,14 @@ const handler = NextAuth({
         if (!isPasswordMatched) {
           throw new Error("Invalid email or password");
         }
-        console.log(user);
+
         return user;
       },
     }),
   ],
-  // pages: {
-  //   signIn: "/login",
-  // },
+  pages: {
+    signIn: "/login",
+  },
   secret: process.env.NEXTAUTH_SECRET,
 });
 

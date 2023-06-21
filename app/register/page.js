@@ -12,10 +12,8 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 function Copyright(props) {
   return (
     <Typography
@@ -35,18 +33,22 @@ function Copyright(props) {
 }
 
 export default function SignUp() {
+  const router = useRouter();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const userFormdata = new FormData(event.currentTarget);
 
     try {
-      const data = await axios.post(/api/, {
+      await axios.post(/api/, {
         firstname: userFormdata.get("firstName"),
         lastname: userFormdata.get("lastName"),
+        phone: userFormdata.get("phone"),
         email: userFormdata.get("email"),
         password: userFormdata.get("password"),
+        city: userFormdata.get("city"),
+        country: userFormdata.get("country"),
       });
-      console.log("from registration page", data);
+      router.push("/login");
     } catch (err) {
       console.log("Registration Failed", err);
     }
@@ -102,11 +104,7 @@ export default function SignUp() {
                 autoComplete="phone"
               />
             </Grid>
-            <Grid item xs={12}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker fullWidth />
-              </LocalizationProvider>
-            </Grid>
+
             <Grid item xs={12}>
               <TextField
                 required
@@ -126,6 +124,26 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="city"
+                label="City"
+                name="city"
+                autoComplete="city"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="country"
+                label="Country"
+                name="country"
+                autoComplete="country"
               />
             </Grid>
             <Grid item xs={12}>
